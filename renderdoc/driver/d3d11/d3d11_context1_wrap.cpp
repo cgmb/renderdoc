@@ -57,7 +57,8 @@ bool WrappedID3D11DeviceContext::Serialise_UpdateSubresource1(
   if(record && record->NumSubResources > (int)DstSubresource)
     record = (D3D11ResourceRecord *)record->SubResources[DstSubresource];
 
-  SERIALISE_ELEMENT_LOCAL(IsUpdate, bool(record->DataInSerialiser || IsActiveCapturing(m_State)))
+  SERIALISE_ELEMENT_LOCAL(IsUpdate,
+                          bool((record && record->DataInSerialiser) || IsActiveCapturing(m_State)))
       .Hidden();
 
   // do we already have data allocated for this resource, or are we capturing a frame? if so, we
