@@ -53,9 +53,9 @@ template <>
 QVariantMap convertToVariant(const QStringMap &val)
 {
   QVariantMap ret;
-  for(const QString &k : val.keys())
+  for(auto it = val.begin(); it != val.end(); ++it)
   {
-    ret[k] = val[k];
+    ret.insert(it.key(), it.value());
   }
   return ret;
 }
@@ -86,9 +86,9 @@ template <>
 QStringMap convertFromVariant(const QVariantMap &val)
 {
   QStringMap ret;
-  for(const QString &k : val.keys())
+  for(auto it = val.begin(); it != val.end(); ++it)
   {
-    ret[k] = val[k].toString();
+    ret.insert(it.key(), it.value().toString());
   }
   return ret;
 }
@@ -242,8 +242,7 @@ bool PersistantConfig::SetStyle()
 
 PersistantConfig::~PersistantConfig()
 {
-  for(RemoteHost *h : RemoteHosts)
-    delete h;
+  qDeleteAll(RemoteHosts);
 }
 
 bool PersistantConfig::Load(const QString &filename)
@@ -251,10 +250,10 @@ bool PersistantConfig::Load(const QString &filename)
   bool ret = Deserialize(filename);
 
   // perform some sanitisation to make sure config is always in sensible state
-  for(const QString &key : ConfigSettings.keys())
+  for(auto it = ConfigSettings.cbegin(); it != ConfigSettings.cend(); ++it)
   {
     // redundantly set each setting so it is flushed to the core dll
-    SetConfigSetting(key, ConfigSettings[key]);
+    SetConfigSetting(it.key(), it.value());
   }
 
   RENDERDOC_SetConfigSetting("Disassembly_FriendlyNaming", ShaderViewer_FriendlyNaming ? "1" : "0");
@@ -262,7 +261,7 @@ bool PersistantConfig::Load(const QString &filename)
   // localhost should always be available as a remote host
   bool foundLocalhost = false;
 
-  for(RemoteHost host : RemoteHostList)
+  for(RemoteHost host : AsConst(RemoteHostList))
   {
     RemoteHosts.push_back(new RemoteHost(host));
 
@@ -287,7 +286,7 @@ bool PersistantConfig::Save()
 
   // update serialize list
   RemoteHostList.clear();
-  for(RemoteHost *host : RemoteHosts)
+  for(RemoteHost *host : AsConst(RemoteHosts))
     RemoteHostList.push_back(*host);
 
   RENDERDOC_SetConfigSetting("Disassembly_FriendlyNaming", ShaderViewer_FriendlyNaming ? "1" : "0");

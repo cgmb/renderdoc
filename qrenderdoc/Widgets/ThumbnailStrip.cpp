@@ -24,6 +24,7 @@
 
 #include "ThumbnailStrip.h"
 #include <QScrollBar>
+#include "Code/QRDUtils.h"
 #include "Widgets/ResourcePreview.h"
 #include "ui_ThumbnailStrip.h"
 
@@ -51,7 +52,7 @@ void ThumbnailStrip::addThumb(ResourcePreview *prev)
 
 void ThumbnailStrip::clearThumbs()
 {
-  for(ResourcePreview *p : m_Thumbnails)
+  for(ResourcePreview *p : AsConst(m_Thumbnails))
   {
     layout->removeWidget(p);
     delete p;
@@ -81,7 +82,7 @@ void ThumbnailStrip::refreshLayout()
   avail.adjust(6, 6, -6, -6);
 
   int numActive = 0;
-  for(ResourcePreview *c : m_Thumbnails)
+  for(ResourcePreview *c : AsConst(m_Thumbnails))
     if(c->isActive())
       numActive++;
 
@@ -98,7 +99,7 @@ void ThumbnailStrip::refreshLayout()
 
     delete layout;
     layout = new QHBoxLayout(ui->scrollAreaWidgetContents);
-    for(ResourcePreview *w : m_Thumbnails)
+    for(ResourcePreview *w : AsConst(m_Thumbnails))
       layout->addWidget(w);
     layout->setSpacing(6);
     layout->setContentsMargins(6, 6, 6, 6);
@@ -110,7 +111,7 @@ void ThumbnailStrip::refreshLayout()
     {
       ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-      for(ResourcePreview *c : m_Thumbnails)
+      for(ResourcePreview *c : AsConst(m_Thumbnails))
         c->setSize(QSize(aspectWidth, avail.height()));
     }
     else
@@ -126,7 +127,7 @@ void ThumbnailStrip::refreshLayout()
       int totalWidth = numActive * (aspectWidth + 20);
       hs->setEnabled(totalWidth > avail.width());
 
-      for(ResourcePreview *c : m_Thumbnails)
+      for(ResourcePreview *c : AsConst(m_Thumbnails))
         c->setSize(QSize(aspectWidth, avail.height()));
     }
   }
@@ -140,7 +141,7 @@ void ThumbnailStrip::refreshLayout()
 
     delete layout;
     layout = new QVBoxLayout(ui->scrollAreaWidgetContents);
-    for(ResourcePreview *w : m_Thumbnails)
+    for(ResourcePreview *w : AsConst(m_Thumbnails))
       layout->addWidget(w);
     layout->setSpacing(6);
     layout->setContentsMargins(6, 6, 6, 6);
@@ -152,7 +153,7 @@ void ThumbnailStrip::refreshLayout()
     {
       ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-      for(ResourcePreview *c : m_Thumbnails)
+      for(ResourcePreview *c : AsConst(m_Thumbnails))
         c->setSize(QSize(avail.width(), aspectHeight));
     }
     else

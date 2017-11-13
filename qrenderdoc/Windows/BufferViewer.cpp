@@ -1280,7 +1280,7 @@ BufferViewer::~BufferViewer()
   if(m_ModelVSIn->indices)
     m_ModelVSIn->indices->deref();
 
-  for(auto vb : m_ModelVSIn->buffers)
+  for(auto vb : AsConst(m_ModelVSIn->buffers))
     vb->deref();
 
   if(m_ModelVSOut->indices)
@@ -1290,10 +1290,10 @@ BufferViewer::~BufferViewer()
   if(m_ModelVSOut->displayIndices)
     m_ModelVSOut->displayIndices->deref();
 
-  for(auto vb : m_ModelVSOut->buffers)
+  for(auto vb : AsConst(m_ModelVSOut->buffers))
     vb->deref();
 
-  for(auto vb : m_ModelGSOut->buffers)
+  for(auto vb : AsConst(m_ModelGSOut->buffers))
     vb->deref();
 
   delete m_Arcball;
@@ -1445,7 +1445,7 @@ void BufferViewer::OnEventChanged(uint32_t eventID)
       {
         // calculate tight stride
         buf->stride = 0;
-        for(const FormatElement &el : m_ModelVSIn->columns)
+        for(const FormatElement &el : AsConst(m_ModelVSIn->columns))
           buf->stride += el.byteSize();
 
         buf->stride = qMax((size_t)1, buf->stride);
@@ -1580,7 +1580,7 @@ void BufferViewer::RT_FetchMeshData(IReplayController *r)
     bool pi = false;
     bool pv = false;
 
-    for(const FormatElement &col : m_ModelVSIn->columns)
+    for(const FormatElement &col : AsConst(m_ModelVSIn->columns))
     {
       if(col.buffer == vbIdx)
       {
@@ -2255,7 +2255,7 @@ void BufferViewer::configureMeshColumns()
 
     i = 0;
     uint32_t offset = 0;
-    for(const FormatElement &sig : m_ModelVSOut->columns)
+    for(const FormatElement &sig : AsConst(m_ModelVSOut->columns))
     {
       uint numComps = sig.format.compCount;
       uint elemSize = sig.format.compType == CompType::Double ? 8U : 4U;
@@ -2322,7 +2322,7 @@ void BufferViewer::configureMeshColumns()
 
       i = 0;
       uint32_t offset = 0;
-      for(const FormatElement &sig : m_ModelGSOut->columns)
+      for(const FormatElement &sig : AsConst(m_ModelGSOut->columns))
       {
         uint numComps = sig.format.compCount;
         uint elemSize = sig.format.compType == CompType::Double ? 8U : 4U;
@@ -2669,7 +2669,7 @@ void BufferViewer::ClearModels()
       m->indices->deref();
     m->indices = NULL;
 
-    for(auto vb : m->buffers)
+    for(auto vb : AsConst(m->buffers))
       vb->deref();
 
     m->buffers.clear();
@@ -2857,7 +2857,7 @@ void BufferViewer::processFormat(const QString &format)
   m_ModelVSIn->columns = cols;
 
   uint32_t stride = 0;
-  for(const FormatElement &el : m_ModelVSIn->columns)
+  for(const FormatElement &el : AsConst(m_ModelVSIn->columns))
     stride += el.byteSize();
 
   stride = qMax(1U, stride);

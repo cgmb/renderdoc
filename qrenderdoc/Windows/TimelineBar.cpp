@@ -697,7 +697,7 @@ void TimelineBar::paintEvent(QPaintEvent *e)
 
     if(!m_HistoryEvents.isEmpty())
     {
-      for(const PixelModification &mod : m_HistoryEvents)
+      for(const PixelModification &mod : AsConst(m_HistoryEvents))
       {
         QPointF pos;
 
@@ -714,7 +714,7 @@ void TimelineBar::paintEvent(QPaintEvent *e)
     }
     else
     {
-      for(const EventUsage &use : m_UsageEvents)
+      for(const EventUsage &use : AsConst(m_UsageEvents))
       {
         QPointF pos;
 

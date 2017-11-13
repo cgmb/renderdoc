@@ -27,7 +27,7 @@
 #include "ui_StatisticsViewer.h"
 
 static const int HistogramWidth = 128;
-static const QString Stars = QString(HistogramWidth, QLatin1Char('*'));
+static const QString Stars(HistogramWidth, QLatin1Char('*'));
 
 QString Pow2IndexAsReadable(int index)
 {

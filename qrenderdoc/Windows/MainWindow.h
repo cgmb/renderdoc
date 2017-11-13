@@ -25,6 +25,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <QHash>
 #include <QMainWindow>
 #include <QTimer>
 #include "3rdparty/toolwindowmanager/ToolWindowManager.h"
@@ -154,7 +155,7 @@ private:
   QList<LiveCapture *> m_LiveCaptures;
 
   QMap<QKeySequence, ShortcutCallback> m_GlobalShortcutCallbacks;
-  QMap<QKeySequence, QMap<QWidget *, ShortcutCallback>> m_WidgetShortcutCallbacks;
+  QMap<QKeySequence, QHash<QWidget *, ShortcutCallback>> m_WidgetShortcutCallbacks;
 
   RDLabel *statusIcon;
   RDLabel *statusText;

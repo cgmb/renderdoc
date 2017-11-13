@@ -145,7 +145,7 @@ void CaptureContext::LoadLogfile(const QString &logFile, const QString &origFile
 
     GUIInvoke::blockcall([&logviewers]() {
       // notify all the registers log viewers that a log has been loaded
-      for(ILogViewer *logviewer : logviewers)
+      for(ILogViewer *logviewer : AsConst(logviewers))
       {
         if(logviewer)
           logviewer->OnLogfileLoaded();
@@ -569,7 +569,7 @@ void CaptureContext::SetEventID(const QVector<ILogViewer *> &exclude, uint32_t s
                                  m_CurGLPipelineState, m_CurVulkanPipelineState);
   });
 
-  for(ILogViewer *logviewer : m_LogViewers)
+  for(ILogViewer *logviewer : AsConst(m_LogViewers))
   {
     if(exclude.contains(logviewer))
       continue;

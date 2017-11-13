@@ -70,7 +70,7 @@ ConstantBufferPreviewer::~ConstantBufferPreviewer()
 
 ConstantBufferPreviewer *ConstantBufferPreviewer::has(ShaderStage stage, uint32_t slot, uint32_t idx)
 {
-  for(ConstantBufferPreviewer *c : m_Previews)
+  for(ConstantBufferPreviewer *c : AsConst(m_Previews))
   {
     if(c->m_stage == stage && c->m_slot == slot && c->m_arrayIdx == idx)
       return c;
@@ -81,7 +81,7 @@ ConstantBufferPreviewer *ConstantBufferPreviewer::has(ShaderStage stage, uint32_
 
 ConstantBufferPreviewer *ConstantBufferPreviewer::getOne()
 {
-  for(ConstantBufferPreviewer *c : m_Previews)
+  for(ConstantBufferPreviewer *c : AsConst(m_Previews))
   {
     if(ToolWindowManager::managerOf(c))
       return c;

@@ -732,7 +732,7 @@ void CaptureDialog::on_envVarEdit_clicked()
 {
   EnvironmentEditor envEditor(this);
 
-  for(const EnvironmentModification &mod : m_EnvModifications)
+  for(const EnvironmentModification &mod : AsConst(m_EnvModifications))
     envEditor.addModification(mod, true);
 
   int res = RDDialog::show(&envEditor);

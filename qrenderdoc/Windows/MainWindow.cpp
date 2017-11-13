@@ -183,7 +183,7 @@ MainWindow::MainWindow(ICaptureContext &ctx) : QMainWindow(NULL), ui(new Ui::Mai
 
   LambdaThread *th = new LambdaThread([this]() {
     m_Ctx.Config().AddAndroidHosts();
-    for(RemoteHost *host : m_Ctx.Config().RemoteHosts)
+    for(RemoteHost *host : AsConst(m_Ctx.Config().RemoteHosts))
       host->CheckStatus();
   });
   th->selfDelete(true);
@@ -598,7 +598,7 @@ bool MainWindow::PromptSaveLog()
 
   if(!saveFilename.isEmpty())
   {
-    if(m_Ctx.IsLogLocal() && !QFileInfo(m_Ctx.LogFilename()).exists())
+    if(m_Ctx.IsLogLocal() && !QFileInfo::exists(m_Ctx.LogFilename()))
     {
       RDDialog::critical(NULL, tr("File not found"),
                          tr("Logfile %1 couldn't be found, cannot save.").arg(m_Ctx.LogFilename()));
@@ -987,7 +987,7 @@ void MainWindow::remoteProbe()
 {
   if(!m_Ctx.LogLoaded() && !m_Ctx.LogLoading())
   {
-    for(RemoteHost *host : m_Ctx.Config().RemoteHosts)
+    for(RemoteHost *host : AsConst(m_Ctx.Config().RemoteHosts))
     {
       // don't mess with a host we're connected to - this is handled anyway
       if(host->Connected)
@@ -1137,7 +1137,7 @@ void MainWindow::switchContext()
     host = m_Ctx.Config().RemoteHosts[hostIdx];
   }
 
-  for(LiveCapture *live : m_LiveCaptures)
+  for(LiveCapture *live : AsConst(m_LiveCaptures))
   {
     // allow live captures to this host to stay open, that way
     // we can connect to a live capture, then switch into that
@@ -1152,7 +1152,7 @@ void MainWindow::switchContext()
   if(!PromptCloseLog())
     return;
 
-  for(LiveCapture *live : m_LiveCaptures)
+  for(LiveCapture *live : AsConst(m_LiveCaptures))
   {
     // allow live captures to this host to stay open, that way
     // we can connect to a live capture, then switch into that
@@ -1362,14 +1362,13 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
     if(focus && m_WidgetShortcutCallbacks.contains(pressed))
     {
-      const QMap<QWidget *, ShortcutCallback> callbacks = m_WidgetShortcutCallbacks[pressed];
-      QList<QWidget *> widgets = callbacks.keys();
+      const QHash<QWidget *, ShortcutCallback> callbacks = m_WidgetShortcutCallbacks[pressed];
 
       while(focus)
       {
         // if we find a direct ancestor to the focus widget which is registered for this shortcut,
         // then use that callback
-        if(widgets.contains(focus))
+        if(callbacks.contains(focus))
         {
           callbacks[focus]();
           event->accept();
@@ -1709,7 +1708,7 @@ void MainWindow::loadLayout_triggered()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-  for(LiveCapture *live : m_LiveCaptures)
+  for(LiveCapture *live : AsConst(m_LiveCaptures))
   {
     if(!live->checkAllowClose())
     {
@@ -1732,7 +1731,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     return;
   }
 
-  for(LiveCapture *live : m_LiveCaptures)
+  for(LiveCapture *live : AsConst(m_LiveCaptures))
   {
     live->cleanItems();
     delete live;

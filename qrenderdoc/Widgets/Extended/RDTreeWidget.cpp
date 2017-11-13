@@ -34,6 +34,7 @@
 #include <QStack>
 #include <QToolTip>
 #include "Code/Interface/QRDInterface.h"
+#include "Code/QRDUtils.h"
 
 class RDTreeWidgetModel : public QAbstractItemModel
 {
@@ -422,7 +423,7 @@ void RDTreeWidgetItem::setWidget(RDTreeWidget *widget)
 
   // if the widget is different, we need to recurse to children
   m_widget = widget;
-  for(RDTreeWidgetItem *item : m_children)
+  for(RDTreeWidgetItem *item : AsConst(m_children))
     item->setWidget(widget);
 }
 

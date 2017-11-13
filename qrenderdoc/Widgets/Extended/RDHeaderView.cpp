@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
+#include "Code/QRDUtils.h"
 
 /////////////////////////////////////////////////////////////////////////////////
 //
@@ -469,7 +470,7 @@ void RDHeaderView::setColumnStretchHints(const QList<int> &hints)
   m_sectionStretchHints = hints;
 
   m_sectionStretchHintTotal = 0;
-  for(int h : m_sectionStretchHints)
+  for(int h : AsConst(m_sectionStretchHints))
   {
     if(h > 0)
       m_sectionStretchHintTotal += h;

@@ -32,7 +32,17 @@
 #include <QProcess>
 #include <QSemaphore>
 #include <QSortFilterProxyModel>
+#include <type_traits>
 #include "Code/Interface/QRDInterface.h"
+
+template <class T>
+constexpr typename std::add_const<T>::type &AsConst(T &x) noexcept
+{
+  return x;
+}
+
+template <class T>
+void AsConst(const T &&) = delete;
 
 template <typename T>
 inline T AlignUp(T x, T a)

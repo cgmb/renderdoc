@@ -460,7 +460,7 @@ void ReplayManager::run()
       m_RenderQueue.swap(queue);
     }
 
-    for(InvokeHandle *cmd : queue)
+    for(InvokeHandle *cmd : AsConst(queue))
     {
       if(cmd == NULL)
         continue;

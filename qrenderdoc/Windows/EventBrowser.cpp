@@ -663,7 +663,7 @@ void EventBrowser::on_colSelect_clicked()
 QString EventBrowser::GetExportDrawcallString(int indent, bool firstchild,
                                               const DrawcallDescription &drawcall)
 {
-  QString prefix = QString(indent * 2 - (firstchild ? 1 : 0), QLatin1Char(' '));
+  QString prefix(indent * 2 - (firstchild ? 1 : 0), QLatin1Char(' '));
   if(firstchild)
     prefix += QLatin1Char('\\');
 
@@ -887,8 +887,7 @@ void EventBrowser::events_contextMenu(const QPoint &pos)
 
 void EventBrowser::clearBookmarks()
 {
-  for(QToolButton *b : m_BookmarkButtons)
-    delete b;
+  qDeleteAll(m_BookmarkButtons);
 
   m_Bookmarks.clear();
   m_BookmarkButtons.clear();
@@ -962,7 +961,7 @@ void EventBrowser::jumpToBookmark(int idx)
 
 void EventBrowser::highlightBookmarks()
 {
-  for(QToolButton *b : m_BookmarkButtons)
+  for(QToolButton *b : AsConst(m_BookmarkButtons))
   {
     if(b->property("eid").toUInt() == m_Ctx.CurEvent())
       b->setChecked(true);
